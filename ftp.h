@@ -12,7 +12,7 @@
 //#include <regex.h>
 #include "ftplib.h"
 
-#define THREAD_NUM 2
+#define THREAD_NUM 1
 #define FTPMOD FTPLIB_ASCII
 
 #define QSIZE 255
