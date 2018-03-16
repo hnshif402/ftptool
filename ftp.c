@@ -14,6 +14,7 @@ int main(int argc, char *argv[])
 	  printf("can't entry dir %s\n", argv[1]);
 	  exit(1);
 	}
+	pthread_mutex_init(&cond_lock, NULL);
 	queue_t q;
 	ftp_t ftp;
 

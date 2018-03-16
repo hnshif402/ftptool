@@ -19,6 +19,7 @@
 #define FTP_PUT_MODE "FTPLIB_ASCII"
 #define PATTERN "*.bin$"
 
+pthread_mutex_t cond_lock;
 typedef struct ftp_operations {
   void (*Init)(void);
   int (*Connect)(const char *host, netbuf **nCtl);
@@ -137,9 +138,7 @@ void * queue_del(void *arg)
   queue_t *q = t->q;
   char *filename;
   char errname[255];
-  pthread_mutex_t c_lock;
   memset(errname, 0, 255 * sizeof(char));
-  pthread_mutex_init(&c_lock, NULL);
   for(;;)
   {
     printf("try to get lock in queue_del.\n");
@@ -151,9 +150,9 @@ void * queue_del(void *arg)
       printf("qlen is 0, waiting\n");
       pthread_barrier_wait(&q->q_b);
       printf("no barrier, begin cond waiting.\n");
-      pthread_mutex_lock(&c_lock);
-      pthread_cond_wait(&q->q_ready, &c_lock);
-      pthread_mutex_unlock(&c_lock);
+      pthread_mutex_lock(&cond_lock);
+      pthread_cond_wait(&q->q_ready, &cond_lock);
+      pthread_mutex_unlock(&cond_lock);
       printf("continue..\n");
       continue;
     }
@@ -170,8 +169,8 @@ void * queue_del(void *arg)
     if(!uploadfile(filename, ftp)){
       printf("Upload %s failed.\n", filename);
       memcpy(errname, filename, strlen(filename)+1);
-      printf("filename %s\n", errname);
-      rename(errname, strcat(errname, ".err"));
+      printf("filename %s/%s\n",getcwd(NULL, 0), errname);
+      rename(filename, strcat(errname, ".err"));
       char *mesg = strerror(errno);
       printf("error: %s\n", mesg);
       printf("errname %s\n", errname);
