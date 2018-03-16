@@ -38,18 +38,29 @@ int main(int argc, char *argv[])
 	    printf("create thread failed.\n");
 	    exit(1);
 	  }
-	  printf("create thread %d success.\n", tid);
+	  printf("create thread %ld success.\n", tid);
 	}
 	for(;;)
 	{
 	  pthread_barrier_wait(&q.q_b);
 	  printf("readdir begin...\n");
+	  rewinddir(dir);
 	  while((dent = readdir(dir)) != NULL)
 	  {
 	    if(!(dent->d_type & DT_REG)) continue;
+	    pthread_mutex_lock(&q.q_lock);
 	     queue_add(dent->d_name, &q);
+	     if(qfull(&q)) {
+		 pthread_mutex_unlock(&q.q_lock);
+		 break;
+	       }
+		pthread_mutex_unlock(&q.q_lock);
 	     printf("file: %s\n", dent->d_name);
 	  }
-	  pthread_cond_broadcast(&q.q_ready);
+	  sleep(5);
+	  printf("send broadcast\n");
+	  for(int i=0; i < THREAD_NUM; i++)
+	    pthread_cond_broadcast(&q.q_ready);
+	 
 	}
 }

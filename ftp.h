@@ -8,6 +8,7 @@
 #include <pthread.h>
 #include <errno.h>
 #include <string.h>
+#include <stdlib.h>
 //#include <regex.h>
 #include "ftplib.h"
 
@@ -17,7 +18,6 @@
 #define QSIZE 255
 #define FTP_PUT_MODE "FTPLIB_ASCII"
 #define PATTERN "*.bin$"
-
 
 typedef struct ftp_operations {
   void (*Init)(void);
@@ -107,7 +107,7 @@ static int qlen(const queue_t *q)
 
 static int qfull(const queue_t *q)
 {
-	return (q->qlen == QSIZE);
+  return q->qlen == QSIZE;
 };
 
 static int qempty(const queue_t *q)
@@ -116,16 +116,12 @@ static int qempty(const queue_t *q)
 };
 void queue_add(char *filename, queue_t *q)
 {
-  while(pthread_mutex_lock(&q->q_lock) && qfull(q))
-  {
-    pthread_mutex_unlock(&q->q_lock);
-    printf("Queue is full,waiting 1 second.");
-    sleep(1);
-   }
+   printf("last is %d\n", q->last);
    q->fname[q->last] = filename;
-   q->last = (q->last++) % QSIZE;
+   q->last = (++q->last) % QSIZE;
    q->qlen++;
-   pthread_mutex_unlock(&q->q_lock);
+   printf("qlen = %d\n", q->qlen);
+   printf("queue last is %s\n", q->fname[q->last-1]);
 };
 
 int uploadfile(char *filename, ftp_t *ftp)
@@ -141,16 +137,23 @@ void * queue_del(void *arg)
   queue_t *q = t->q;
   char *filename;
   char errname[255];
+  pthread_mutex_t c_lock;
   memset(errname, 0, 255 * sizeof(char));
+  pthread_mutex_init(&c_lock, NULL);
   for(;;)
   {
+    printf("try to get lock in queue_del.\n");
     pthread_mutex_lock(&q->q_lock);
+    printf("Got lock.\n");
     if(qempty(q))
     {
       pthread_mutex_unlock(&q->q_lock);
       printf("qlen is 0, waiting\n");
       pthread_barrier_wait(&q->q_b);
-      pthread_cond_wait(&q->q_ready, &q->q_lock);
+      printf("no barrier, begin cond waiting.\n");
+      pthread_mutex_lock(&c_lock);
+      pthread_cond_wait(&q->q_ready, &c_lock);
+      pthread_mutex_unlock(&c_lock);
       printf("continue..\n");
       continue;
     }
@@ -159,7 +162,7 @@ void * queue_del(void *arg)
     printf("q->first is: %d\n", q->first);
     printf("filename %s\n", q->fname[q->first]);
     filename = q->fname[q->first];
-    q->first = q->first++ % QSIZE;
+    q->first = (++q->first) % QSIZE;
     printf("q->first is %d\n", q->first);
     q->qlen--;
     printf("queue len is: %d\n", q->qlen);
@@ -175,6 +178,7 @@ void * queue_del(void *arg)
       exit(1);
     }
     printf("%s upload success.\n", filename);
+    
     if(remove(filename))
     {
       printf("delete file %s failed.", filename);
@@ -182,6 +186,7 @@ void * queue_del(void *arg)
       printf("filename %s\n", errname);
       rename(errname, strcat(errname, ".err"));
     }
+    
     }
 };
 
