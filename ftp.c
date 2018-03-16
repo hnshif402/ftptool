@@ -16,10 +16,10 @@ int main(int argc, char *argv[])
 	}
 	pthread_mutex_init(&cond_lock, NULL);
 	queue_t q;
-	ftp_t ftp;
+	//ftp_t ftp;
 
 	queue_init(&q);
-	ftp_init(&ftp, argv[2], argv[3], argv[4], argv[5]);
+	//ftp_init(&ftp, argv[2], argv[3], argv[4], argv[5]);
 	DIR *dir;
 	struct dirent *dent;
 
@@ -30,9 +30,12 @@ int main(int argc, char *argv[])
 	}
 	int i, ret;
 	pthread_t tid;
-	arg_t t = {&ftp, &q};
+	arg_t t;
 	for(i = 0; i < THREAD_NUM; i++)
 	{
+	  ftp_t ftp;
+	  ftp_init(&ftp, argv[2], argv[3], argv[4], argv[5]);
+	  arg_t t = { &ftp, &q };
 	  ret = pthread_create(&tid, NULL, queue_del, &t);
 	  if(ret != 0)
 	  {

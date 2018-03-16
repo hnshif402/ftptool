@@ -12,7 +12,7 @@
 //#include <regex.h>
 #include "ftplib.h"
 
-#define THREAD_NUM 3
+#define THREAD_NUM 2
 #define FTPMOD FTPLIB_ASCII
 
 #define QSIZE 255
@@ -162,19 +162,13 @@ void * queue_del(void *arg)
     printf("filename %s\n", q->fname[q->first]);
     filename = q->fname[q->first];
     q->first = (++q->first) % QSIZE;
-    printf("q->first is %d\n", q->first);
     q->qlen--;
-    printf("queue len is: %d\n", q->qlen);
     pthread_mutex_unlock(&q->q_lock);
     if(!uploadfile(filename, ftp)){
       printf("Upload %s failed.\n", filename);
       memcpy(errname, filename, strlen(filename)+1);
-      printf("filename %s/%s\n",getcwd(NULL, 0), errname);
       rename(filename, strcat(errname, ".err"));
-      char *mesg = strerror(errno);
-      printf("error: %s\n", mesg);
-      printf("errname %s\n", errname);
-      exit(1);
+      continue;
     }
     printf("%s upload success.\n", filename);
     
