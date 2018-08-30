@@ -12,14 +12,13 @@
 //#include <regex.h>
 #include "ftplib.h"
 
-#define THREAD_NUM 1
+#define THREAD_NUM 3
 #define FTPMOD FTPLIB_ASCII
 
 #define QSIZE 255
 #define FTP_PUT_MODE "FTPLIB_ASCII"
 #define PATTERN "*.bin$"
 
-pthread_mutex_t cond_lock;
 typedef struct ftp_operations {
   void (*Init)(void);
   int (*Connect)(const char *host, netbuf **nCtl);
@@ -83,6 +82,7 @@ typedef struct queue {
   pthread_mutex_t q_lock;
   pthread_barrier_t q_b;
   pthread_cond_t q_ready;
+  pthread_mutex_t c_lock;
 } queue_t;
 
 typedef struct param {
@@ -94,6 +94,7 @@ int queue_init(queue_t *q)
 {
 	memset(q->fname, 0, QSIZE * sizeof(char *));
 	pthread_mutex_init(&q->q_lock, NULL);
+	pthread_mutex_init(&q->c_lock, NULL);
 	pthread_barrier_init(&q->q_b, NULL, THREAD_NUM+1);
 	pthread_cond_init(&q->q_ready, NULL);
 	q->first = 0;
@@ -117,12 +118,12 @@ static int qempty(const queue_t *q)
 };
 void queue_add(char *filename, queue_t *q)
 {
-   printf("last is %d\n", q->last);
+  //printf("last is %d\n", q->last);
    q->fname[q->last] = filename;
    q->last = (++q->last) % QSIZE;
    q->qlen++;
-   printf("qlen = %d\n", q->qlen);
-   printf("queue last is %s\n", q->fname[q->last-1]);
+   //printf("qlen = %d\n", q->qlen);
+   // printf("queue last is %s\n", q->fname[q->last-1]);
 };
 
 int uploadfile(char *filename, ftp_t *ftp)
@@ -133,6 +134,8 @@ int uploadfile(char *filename, ftp_t *ftp)
 
 void * queue_del(void *arg)
 {
+  pthread_t pid;
+  pid = pthread_self();
   arg_t *t = (arg_t*) arg;
   ftp_t *ftp = t->ftp;
   queue_t *q = t->q;
@@ -141,42 +144,49 @@ void * queue_del(void *arg)
   memset(errname, 0, 255 * sizeof(char));
   for(;;)
   {
-    printf("try to get lock in queue_del.\n");
-    pthread_mutex_lock(&q->q_lock);
-    printf("Got lock.\n");
-    if(qempty(q))
+    //pthread_mutex_lock(&q->q_lock);
+    while(1)
     {
+      printf("%ld:try to get lock in queue_del.\n", pid);
+      pthread_mutex_lock(&q->q_lock);
+      printf("%ld: Got lock.\n",pid);
+      if(!qempty(q)) break;
       pthread_mutex_unlock(&q->q_lock);
-      printf("qlen is 0, waiting\n");
+      printf("%ld: qlen is 0, waiting\n", pid);
       pthread_barrier_wait(&q->q_b);
-      printf("no barrier, begin cond waiting.\n");
-      pthread_mutex_lock(&cond_lock);
-      pthread_cond_wait(&q->q_ready, &cond_lock);
-      pthread_mutex_unlock(&cond_lock);
-      printf("continue..\n");
-      continue;
+      printf("%ld: no barrier, begin cond waiting.\n",pid);
+      pthread_mutex_lock(&q->c_lock);
+      pthread_cond_wait(&q->q_ready, &q->c_lock);
     }
-    printf("PWD:%s\n", getcwd(NULL, 0));
-    printf("queue len is: %d\n", q->qlen);
-    printf("q->first is: %d\n", q->first);
-    printf("filename %s\n", q->fname[q->first]);
+    printf("%ld: process queue...\n", pid);
+    pthread_mutex_unlock(&q->c_lock);
+    printf("%ld: PWD:%s\n", pid, getcwd(NULL, 0));
+    printf("%ld: queue len is: %d\n",pid,  q->qlen);
+    printf("%ld: q->first is: %d\n",pid, q->first);
+    printf("%ld: filename %s\n", pid, q->fname[q->first]);
     filename = q->fname[q->first];
     q->first = (++q->first) % QSIZE;
+    printf("%ld: q->first is %d\n",pid, q->first);
     q->qlen--;
+    printf("%ld: queue len is: %d\n", pid, q->qlen);
     pthread_mutex_unlock(&q->q_lock);
     if(!uploadfile(filename, ftp)){
-      printf("Upload %s failed.\n", filename);
+      printf("%ld: Upload %s failed.\n", pid, filename);
       memcpy(errname, filename, strlen(filename)+1);
-      rename(filename, strcat(errname, ".err"));
-      continue;
+      printf("%ld: filename %s\n", pid, errname);
+      rename(errname, strcat(errname, ".err"));
+      char *mesg = strerror(errno);
+      printf("%ld: error: %s\n", pid, mesg);
+      printf("%ld: errname %s\n", pid, errname);
+      exit(1);
     }
-    printf("%s upload success.\n", filename);
+    printf("%ld: %s upload success.\n",pid, filename);
     
     if(remove(filename))
     {
-      printf("delete file %s failed.", filename);
+      printf("%ld: delete file %s failed.", pid, filename);
       memcpy(errname, filename, strlen(filename)+1);
-      printf("filename %s\n", errname);
+      printf("%ld: filename %s\n",pid,  errname);
       rename(errname, strcat(errname, ".err"));
     }
     

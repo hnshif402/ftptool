@@ -14,12 +14,13 @@ int main(int argc, char *argv[])
 	  printf("can't entry dir %s\n", argv[1]);
 	  exit(1);
 	}
-	pthread_mutex_init(&cond_lock, NULL);
 	queue_t q;
-	//ftp_t ftp;
-
+	ftp_t ftp[THREAD_NUM];
+	
+	int i;
 	queue_init(&q);
-	//ftp_init(&ftp, argv[2], argv[3], argv[4], argv[5]);
+	for (i = 0; i < THREAD_NUM; i++)
+	  ftp_init(&ftp[i], argv[2], argv[3], argv[4], argv[5]);
 	DIR *dir;
 	struct dirent *dent;
 
@@ -28,14 +29,14 @@ int main(int argc, char *argv[])
 		printf("open dir %s error.\n", argv[1]);
 		exit(1);
 	}
-	int i, ret;
+	
+	int ret;
 	pthread_t tid;
 	arg_t t;
 	for(i = 0; i < THREAD_NUM; i++)
 	{
-	  ftp_t ftp;
-	  ftp_init(&ftp, argv[2], argv[3], argv[4], argv[5]);
-	  arg_t t = { &ftp, &q };
+	  t.ftp = &ftp[THREAD_NUM];
+	  t.q = &q;
 	  ret = pthread_create(&tid, NULL, queue_del, &t);
 	  if(ret != 0)
 	  {
@@ -49,22 +50,21 @@ int main(int argc, char *argv[])
 	  pthread_barrier_wait(&q.q_b);
 	  printf("readdir begin...\n");
 	  rewinddir(dir);
+	  pthread_mutex_lock(&q.q_lock);
 	  while((dent = readdir(dir)) != NULL)
 	  {
 	    if(!(dent->d_type & DT_REG)) continue;
-	    pthread_mutex_lock(&q.q_lock);
 	     queue_add(dent->d_name, &q);
-	     if(qfull(&q)) {
-		 pthread_mutex_unlock(&q.q_lock);
-		 break;
-	       }
-		pthread_mutex_unlock(&q.q_lock);
-	     printf("file: %s\n", dent->d_name);
+	     //printf("file: %s\n", dent->d_name);
+	     if(qfull(&q))  break;
 	  }
+	  pthread_mutex_unlock(&q.q_lock);
 	  sleep(5);
 	  printf("send broadcast\n");
-	  for(int i=0; i < THREAD_NUM; i++)
+	  pthread_mutex_lock(&q.c_lock);
+	  if(!qempty(&q))
 	    pthread_cond_broadcast(&q.q_ready);
+	  pthread_mutex_unlock(&q.c_lock);
 	 
 	}
 }
