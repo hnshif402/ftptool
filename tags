@@ -1,0 +1,164 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+ACCEPT_TIMEOUT	ftplib.c	71;"	d	file:
+BUILDING_LIBRARY	ftplib.c	51;"	d	file:
+CC	makefile	/^CC = gcc$/;"	m
+CFLAGS	makefile	/^CFLAGS = -Wall -g -std=c99$/;"	m
+Chdir	ftp.h	/^  int (*Chdir)(const char *path, netbuf *nCtl);$/;"	m	struct:ftp_operations
+Connect	ftp.h	/^  int (*Connect)(const char *host, netbuf **nCtl);$/;"	m	struct:ftp_operations
+FTPLIB_ASCII	ftplib.h	45;"	d
+FTPLIB_BINARY	ftplib.h	48;"	d
+FTPLIB_BUFSIZ	ftplib.c	68;"	d	file:
+FTPLIB_CALLBACK	ftplib.h	56;"	d
+FTPLIB_CALLBACKARG	ftplib.h	58;"	d
+FTPLIB_CALLBACKBYTES	ftplib.h	59;"	d
+FTPLIB_CONNMODE	ftplib.h	55;"	d
+FTPLIB_CONTROL	ftplib.c	73;"	d	file:
+FTPLIB_DEFMODE	ftplib.c	78;"	d	file:
+FTPLIB_DIR	ftplib.h	39;"	d
+FTPLIB_DIR_VERBOSE	ftplib.h	40;"	d
+FTPLIB_FILE_READ	ftplib.h	41;"	d
+FTPLIB_FILE_WRITE	ftplib.h	42;"	d
+FTPLIB_IDLETIME	ftplib.h	57;"	d
+FTPLIB_IMAGE	ftplib.h	46;"	d
+FTPLIB_PASSIVE	ftplib.h	51;"	d
+FTPLIB_PORT	ftplib.h	52;"	d
+FTPLIB_READ	ftplib.c	74;"	d	file:
+FTPLIB_TEXT	ftplib.h	47;"	d
+FTPLIB_WRITE	ftplib.c	75;"	d	file:
+FTP_OPS_INIT	ftp.h	36;"	d
+FtpAcceptConnection	ftplib.c	/^static int FtpAcceptConnection(netbuf *nData, netbuf *nControl)$/;"	f	file:
+FtpAccess	ftplib.c	/^GLOBALDEF int FtpAccess(const char *path, int typ, int mode, netbuf *nControl,$/;"	f
+FtpCDUp	ftplib.c	/^GLOBALDEF int FtpCDUp(netbuf *nControl)$/;"	f
+FtpCallback	ftplib.h	/^typedef int (*FtpCallback)(netbuf *nControl, fsz_t xfered, void *arg);$/;"	t
+FtpCallbackOptions	ftplib.h	/^typedef struct FtpCallbackOptions {$/;"	s
+FtpCallbackOptions	ftplib.h	/^} FtpCallbackOptions;$/;"	t	typeref:struct:FtpCallbackOptions
+FtpChdir	ftplib.c	/^GLOBALDEF int FtpChdir(const char *path, netbuf *nControl)$/;"	f
+FtpClearCallback	ftplib.c	/^GLOBALDEF int FtpClearCallback(netbuf *nControl)$/;"	f
+FtpClose	ftplib.c	/^GLOBALDEF int FtpClose(netbuf *nData)$/;"	f
+FtpConnect	ftplib.c	/^GLOBALDEF int FtpConnect(const char *host, netbuf **nControl)$/;"	f
+FtpDelete	ftplib.c	/^GLOBALDEF int FtpDelete(const char *fnm, netbuf *nControl)$/;"	f
+FtpDir	ftplib.c	/^GLOBALDEF int FtpDir(const char *outputfile, const char *path, netbuf *nControl)$/;"	f
+FtpGet	ftplib.c	/^GLOBALDEF int FtpGet(const char *outputfile, const char *path,$/;"	f
+FtpInit	ftplib.c	/^GLOBALDEF void FtpInit(void)$/;"	f
+FtpLastResponse	ftplib.c	/^GLOBALDEF char *FtpLastResponse(netbuf *nControl)$/;"	f
+FtpLogin	ftplib.c	/^GLOBALDEF int FtpLogin(const char *user, const char *pass, netbuf *nControl)$/;"	f
+FtpMkdir	ftplib.c	/^GLOBALDEF int FtpMkdir(const char *path, netbuf *nControl)$/;"	f
+FtpModDate	ftplib.c	/^GLOBALDEF int FtpModDate(const char *path, char *dt, int max, netbuf *nControl)$/;"	f
+FtpNlst	ftplib.c	/^GLOBALDEF int FtpNlst(const char *outputfile, const char *path,$/;"	f
+FtpOpenPort	ftplib.c	/^static int FtpOpenPort(netbuf *nControl, netbuf **nData, int mode, int dir)$/;"	f	file:
+FtpOptions	ftplib.c	/^GLOBALDEF int FtpOptions(int opt, long val, netbuf *nControl)$/;"	f
+FtpPut	ftplib.c	/^GLOBALDEF int FtpPut(const char *inputfile, const char *path, char mode,$/;"	f
+FtpPwd	ftplib.c	/^GLOBALDEF int FtpPwd(char *path, int max, netbuf *nControl)$/;"	f
+FtpQuit	ftplib.c	/^GLOBALDEF void FtpQuit(netbuf *nControl)$/;"	f
+FtpRead	ftplib.c	/^GLOBALDEF int FtpRead(void *buf, int max, netbuf *nData)$/;"	f
+FtpRename	ftplib.c	/^GLOBALDEF int FtpRename(const char *src, const char *dst, netbuf *nControl)$/;"	f
+FtpRmdir	ftplib.c	/^GLOBALDEF int FtpRmdir(const char *path, netbuf *nControl)$/;"	f
+FtpSendCmd	ftplib.c	/^static int FtpSendCmd(const char *cmd, char expresp, netbuf *nControl)$/;"	f	file:
+FtpSetCallback	ftplib.c	/^GLOBALDEF int FtpSetCallback(const FtpCallbackOptions *opt, netbuf *nControl)$/;"	f
+FtpSite	ftplib.c	/^GLOBALDEF int FtpSite(const char *cmd, netbuf *nControl)$/;"	f
+FtpSize	ftplib.c	/^GLOBALDEF int FtpSize(const char *path, unsigned int *size, char mode, netbuf *nControl)$/;"	f
+FtpSizeLong	ftplib.c	/^GLOBALDEF int FtpSizeLong(const char *path, fsz_t *size, char mode, netbuf *nControl)$/;"	f
+FtpSysType	ftplib.c	/^GLOBALDEF int FtpSysType(char *buf, int max, netbuf *nControl)$/;"	f
+FtpWrite	ftplib.c	/^GLOBALDEF int FtpWrite(const void *buf, int len, netbuf *nData)$/;"	f
+FtpXfer	ftplib.c	/^static int FtpXfer(const char *localfile, const char *path,$/;"	f	file:
+GLOBALDEF	ftplib.h	24;"	d
+GLOBALDEF	ftplib.h	28;"	d
+GLOBALREF	ftplib.h	25;"	d
+GLOBALREF	ftplib.h	29;"	d
+GLOBALREF	ftplib.h	31;"	d
+Init	ftp.h	/^  void (*Init)(void);$/;"	m	struct:ftp_operations
+Login	ftp.h	/^  int (*Login)(const char *user, const char *pass, netbuf *nCtl);$/;"	m	struct:ftp_operations
+NetBuf	ftplib.c	/^struct NetBuf {$/;"	s	file:
+OBJS	makefile	/^OBJS =  ftplib.o ftp.o$/;"	m
+Options	ftp.h	/^  int (*Options)(int opt, long val, netbuf *nCtl); \/* FTPLIB_CONNMODE: FTPLIB_PASSIVE or FTPLIB_PORT *\/$/;"	m	struct:ftp_operations
+PATTERN	ftp.h	18;"	d
+PRIu64	ftplib.c	56;"	d	file:
+PRIu64	ftplib.c	58;"	d	file:
+Put	ftp.h	/^  int (*Put)(const char *input, const char *path, char mode, netbuf *nCtl);$/;"	m	struct:ftp_operations
+QSIZE	ftp.h	17;"	d
+Quit	ftp.h	/^  void (*Quit)(netbuf *nCtl);$/;"	m	struct:ftp_operations
+RESPONSE_BUFSIZ	ftplib.c	69;"	d	file:
+SETSOCKOPT_OPTVAL_TYPE	ftplib.c	63;"	d	file:
+SETSOCKOPT_OPTVAL_TYPE	ftplib.c	65;"	d	file:
+THREAD_NUM	ftp.h	15;"	d
+TMP_BUFSIZ	ftplib.c	70;"	d	file:
+_REENTRANT	ftplib.c	48;"	d	file:
+__FTPLIB_H	ftplib.h	21;"	d
+__FTP_H	ftp.h	2;"	d
+arg_t	ftp.h	/^} arg_t;$/;"	t	typeref:struct:param
+buf	ftplib.c	/^    char *buf;$/;"	m	struct:NetBuf	file:
+bytesXferred	ftplib.h	/^    unsigned int bytesXferred;	\/* callback if this number of bytes transferred *\/$/;"	m	struct:FtpCallbackOptions
+cavail	ftplib.c	/^    int cavail,cleft;$/;"	m	struct:NetBuf	file:
+cbArg	ftplib.h	/^    void *cbArg;		\/* argument to pass to function *\/$/;"	m	struct:FtpCallbackOptions
+cbFunc	ftplib.h	/^    FtpCallback cbFunc;		\/* function to call *\/$/;"	m	struct:FtpCallbackOptions
+cbbytes	ftplib.c	/^    unsigned long int cbbytes;$/;"	m	struct:NetBuf	file:
+cget	ftplib.c	/^    char *cput,*cget;$/;"	m	struct:NetBuf	file:
+cleft	ftplib.c	/^    int cavail,cleft;$/;"	m	struct:NetBuf	file:
+cmode	ftplib.c	/^    int cmode;$/;"	m	struct:NetBuf	file:
+cput	ftplib.c	/^    char *cput,*cget;$/;"	m	struct:NetBuf	file:
+ctrl	ftplib.c	/^    netbuf *ctrl;$/;"	m	struct:NetBuf	file:
+data	ftplib.c	/^    netbuf *data;    $/;"	m	struct:NetBuf	file:
+dir	ftplib.c	/^    int dir;$/;"	m	struct:NetBuf	file:
+first	ftp.h	/^  int first;$/;"	m	struct:queue
+fname	ftp.h	/^  char *fname[QSIZE];$/;"	m	struct:queue
+fsz_t	ftplib.h	/^typedef uint32_t fsz_t;$/;"	t
+fsz_t	ftplib.h	/^typedef uint64_t fsz_t;$/;"	t
+ftp	ftp.h	/^  ftp_t *ftp;$/;"	m	struct:param
+ftp	ftp.h	/^typedef struct ftp {$/;"	s
+ftp_init	ftp.h	/^void ftp_init(ftp_t *ftp, ftp_oper_t *f_ops, char *host, char *user, char *pass, char* path) $/;"	f
+ftp_oper_t	ftp.h	/^} ftp_oper_t;$/;"	t	typeref:struct:ftp_operations
+ftp_operations	ftp.h	/^typedef struct ftp_operations {$/;"	s
+ftp_ops	ftp.h	/^	ftp_oper_t *ftp_ops;$/;"	m	struct:ftp
+ftp_release	ftp.h	/^void ftp_release(ftp_t *ftp)$/;"	f
+ftp_t	ftp.h	/^} ftp_t;$/;"	t	typeref:struct:ftp
+ftplib_debug	ftplib.c	/^GLOBALDEF int ftplib_debug = 0;$/;"	v
+ftplib_debug	ftplib.h	/^GLOBALREF int ftplib_debug;$/;"	v
+handle	ftplib.c	/^    int handle;$/;"	m	struct:NetBuf	file:
+idleTime	ftplib.h	/^    unsigned int idleTime;	\/* callback if this many milliseconds have elapsed *\/$/;"	m	struct:FtpCallbackOptions
+idlearg	ftplib.c	/^    void *idlearg;$/;"	m	struct:NetBuf	file:
+idlecb	ftplib.c	/^    FtpCallback idlecb;$/;"	m	struct:NetBuf	file:
+idletime	ftplib.c	/^    struct timeval idletime;$/;"	m	struct:NetBuf	typeref:struct:NetBuf::timeval	file:
+last	ftp.h	/^  int last;$/;"	m	struct:queue
+main	ftp.c	/^int main(int argc, char *argv[])$/;"	f
+main	ftptest.c	/^int main(int argc, char* argv[])$/;"	f
+main	mftp.c	/^int main(int argc, char *argv[]) {$/;"	f
+memccpy	ftplib.c	/^void *memccpy(void *dest, const void *src, int c, size_t n)$/;"	f
+mftp	mftp.c	/^int mftp(FILE *fp, char *cmd, char *file)$/;"	f
+nCtl	ftp.h	/^	netbuf *nCtl;$/;"	m	struct:ftp
+net_close	ftplib.c	146;"	d	file:
+net_close	ftplib.c	150;"	d	file:
+net_read	ftplib.c	/^int net_read(int fd, char *buf, size_t len)$/;"	f
+net_read	ftplib.c	148;"	d	file:
+net_write	ftplib.c	/^int net_write(int fd, const char *buf, size_t len)$/;"	f
+net_write	ftplib.c	149;"	d	file:
+netbuf	ftplib.h	/^typedef struct NetBuf netbuf;$/;"	t	typeref:struct:NetBuf
+openftp	mftp.c	/^FILE *openftp(char *ip, char *user, char *pass)$/;"	f
+param	ftp.h	/^typedef struct param {$/;"	s
+q	ftp.h	/^  queue_t *q;$/;"	m	struct:param
+q_b	ftp.h	/^  pthread_barrier_t q_b;$/;"	m	struct:queue
+q_lock	ftp.h	/^  pthread_mutex_t q_lock;$/;"	m	struct:queue
+qempty	ftp.h	/^static int qempty(const queue_t *q)$/;"	f
+qfull	ftp.h	/^static int qfull(const queue_t *q)$/;"	f
+qlen	ftp.h	/^  int qlen;$/;"	m	struct:queue
+qlen	ftp.h	/^static int qlen(const queue_t *q)$/;"	f
+queue	ftp.h	/^typedef struct queue {$/;"	s
+queue_add	ftp.h	/^void queue_add(char *filename, queue_t *q)$/;"	f
+queue_del	ftp.h	/^void * queue_del(void *arg)$/;"	f
+queue_init	ftp.h	/^int queue_init(queue_t *q)$/;"	f
+queue_t	ftp.h	/^} queue_t;$/;"	t	typeref:struct:queue
+readline	ftplib.c	/^static int readline(char *buf,int max,netbuf *ctl)$/;"	f	file:
+readresp	ftplib.c	/^static int readresp(char c, netbuf *nControl)$/;"	f	file:
+ready	ftp.h	/^  int ready;$/;"	m	struct:queue
+response	ftplib.c	/^    char response[RESPONSE_BUFSIZ];$/;"	m	struct:NetBuf	file:
+socket_wait	ftplib.c	/^static int socket_wait(netbuf *ctl)$/;"	f	file:
+strdup	ftplib.c	/^char *strdup(const char *src)$/;"	f
+uploadfile	ftp.h	/^int uploadfile(char *filename, ftp_t *ftp)$/;"	f
+version	ftplib.c	/^static char *version =$/;"	v	file:
+writeline	ftplib.c	/^static int writeline(const char *buf, int len, netbuf *nData)$/;"	f	file:
+xfered	ftplib.c	/^    unsigned long int xfered;$/;"	m	struct:NetBuf	file:
+xfered1	ftplib.c	/^    unsigned long int xfered1;$/;"	m	struct:NetBuf	file:
