@@ -309,6 +309,7 @@ static int readline(char *buf,int max,netbuf *ctl)
  */
 static int writeline(const char *buf, int len, netbuf *nData)
 {
+	printf("we are here in writeline function.\n");
     int x, nb=0, w;
     const char *ubp = buf;
     char *nbp;
@@ -642,8 +643,10 @@ static int FtpSendCmd(const char *cmd, char expresp, netbuf *nControl)
     if ((strlen(cmd) + 3) > sizeof(buf))
         return 0;
     sprintf(buf,"%s\r\n",cmd);
+	printf("buf: %s, fd: %d in FtpSendCmd.\n", buf, nControl->handle);
     if (net_write(nControl->handle,buf,strlen(buf)) <= 0)
     {
+		printf("net_write error FtpSendCmd function.\n");
 	if (ftplib_debug)
 	    perror("write");
 	return 0;
@@ -921,8 +924,10 @@ GLOBALDEF int FtpAccess(const char *path, int typ, int mode, netbuf *nControl,
 	return 0;
     }
     sprintf(buf, "TYPE %c", mode);
+	printf("mode = %s in FtpAccess.\n", buf);
     if (!FtpSendCmd(buf, '2', nControl))
 	return 0;
+	//printf("FtpSendCmd is succ in FtpAccess.\n");
     switch (typ)
     {
       case FTPLIB_DIR:
@@ -953,14 +958,18 @@ GLOBALDEF int FtpAccess(const char *path, int typ, int mode, netbuf *nControl,
             return 0;
         strcpy(&buf[i],path);
     }
+	printf("buf: %s in FtpAccess.\n", buf);
     if (FtpOpenPort(nControl, nData, mode, dir) == -1)
 	return 0;
+	printf("FtpOpenPort success in FtpAccess function.\n");
     if (!FtpSendCmd(buf, '1', nControl))
     {
 	FtpClose(*nData);
 	*nData = NULL;
 	return 0;
     }
+	printf("FtpSendCmd success in FtpAccess function.\n");
+	printf("FTP Mode: %d.\n", nControl->cmode);
     if (nControl->cmode == FTPLIB_PORT)
     {
 	if (!FtpAcceptConnection(*nData,nControl))
@@ -1208,6 +1217,7 @@ GLOBALDEF int FtpPwd(char *path, int max, netbuf *nControl)
 static int FtpXfer(const char *localfile, const char *path,
 	netbuf *nControl, int typ, int mode)
 {
+	printf("localfile: %s, path: %s in FtpXfer function.\n", localfile, path);
     int l,c;
     char *dbuf;
     FILE *local = NULL;
@@ -1227,6 +1237,7 @@ static int FtpXfer(const char *localfile, const char *path,
 	local = fopen(localfile, ac);
 	if (local == NULL)
 	{
+		printf("fopen is error in FtpXfer function.\n");
 	    strncpy(nControl->response, strerror(errno),
                     sizeof(nControl->response));
 	    return 0;
@@ -1236,6 +1247,8 @@ static int FtpXfer(const char *localfile, const char *path,
 	local = (typ == FTPLIB_FILE_WRITE) ? stdin : stdout;
     if (!FtpAccess(path, typ, mode, nControl, &nData))
     {
+		printf("path: %s, type: %d, mode: %d, nCtrl: %s\n", path, typ, mode, nControl);
+		printf("FtpAccess is error in FtpXfer function.\n");
 	if (localfile)
 	{
 	    fclose(local);
@@ -1398,6 +1411,7 @@ GLOBALDEF int FtpGet(const char *outputfile, const char *path,
 GLOBALDEF int FtpPut(const char *inputfile, const char *path, char mode,
 	netbuf *nControl)
 {
+	printf("inputfile: %s, path: %s\n", inputfile, path);
     return FtpXfer(inputfile, path, nControl, FTPLIB_FILE_WRITE, mode);
 }
 

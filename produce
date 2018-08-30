@@ -2,6 +2,6 @@ first=1
 last=$(($first+199))
 for((x=first; x < last; x++))
 do
-  cp /home/shif/ftplib/ftp.c /home/shif/ftplib/test/ftp.c$x
+  cp /root/ftptool/ftp.c /root/ftptool/test/ftp.c$x
 done
 #first=((first+200))
