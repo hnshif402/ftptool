@@ -52,8 +52,12 @@ int main(int argc, char *argv[])
 	  }
 	  printf("create thread %ld success.\n", tid);
 	}
-	
-	queue_fill(&q, dir);
+
+	//char *pattern = "*[245]\\.bin$";
+	regex_t r1;
+	char *ppattern = "f*[245]\\.bin$";
+	if( regex_init(&r1, ppattern) == -1 ) {printf("init regex failed.\n"); exit(1);}
+	queue_fill(&q, dir, &r1) ;
 	
 	exit(0);
 }

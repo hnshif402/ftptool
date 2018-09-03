@@ -9,7 +9,7 @@
 #include <errno.h>
 #include <string.h>
 #include <stdlib.h>
-#include <regex.h>
+#include "ftpregex.h"
 #include "ftplib.h"
 
 #define THREAD_NUM 3
@@ -142,10 +142,11 @@ int uploadfile(char *filename, ftp_t *ftp)
 };
 
 
-void * queue_fill(queue_t *qpt, DIR *dpt) {
+void * queue_fill(queue_t *qpt, DIR *dpt, regex_t *preg) {
 	queue_t *qp = qpt;
     DIR *dp = dpt;
     struct dirent *dent;
+	char *filename;
 	for(;;)
 	{
 	  printf("readdir begin...\n");
@@ -154,8 +155,10 @@ void * queue_fill(queue_t *qpt, DIR *dpt) {
 	  while((dent = readdir(dp)) != NULL)
 	  {
 	    if(!(dent->d_type & DT_REG)) continue;
-	      queue_add(dent->d_name, qp);
-	     if(qfull(qp))  break;
+		filename = dent->d_name;
+		if( ! match(preg, filename) ) continue;
+	    queue_add(filename, qp);
+	    if(qfull(qp))  break;
 	  }
 	  printf("qlen = %d, first = %d, last = %d\n", qp->qlen, qp->first, qp->last);
 	  pthread_mutex_unlock(&qp->q_lock);
@@ -227,8 +230,9 @@ void * process_queue(void *arg)
         printf("%ld: delete success %s\n", pid, filename);
    }
 }
+
 /*
-char* get_filename(struct dirent *dent)
+int get_qnum(const char *ftemp)
 {
 	return dent->d_name;
 };
