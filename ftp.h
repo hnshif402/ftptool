@@ -60,4 +60,30 @@ typedef struct param {
   queue_t *q;
 } ftp_arg_t;
 
+void *process_queue(void* arg);
+char *fetch_one(queue_t* qp);
+void *queue_fill(queue_t* qpt, DIR* dpt, regex_t* preg);
+int uploadfile(char* filename, ftp_t* ftp);
+void queue_add(char* filename, queue_t* qpt);
+void queue_init(queue_t* q);
+void ftp_release(ftp_t* ftp);
+void ftp_init(ftp_t*, ftp_oper_t*, char*, char*, char*, char* , char*) ;
+void copyfile(char *filename, char *path);
+void movefile(char *filename, char *path);
+int matchstr(char *str, char *substr);
+
+static int qlen(const queue_t *q)
+{
+	return q->qlen;
+};
+
+static int qfull(const queue_t *q)
+{
+  return q->qlen == QSIZE;
+};
+
+static int qempty(const queue_t *q)
+{
+	return q->qlen == 0;
+};
 #endif

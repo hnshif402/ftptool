@@ -1,5 +1,5 @@
 #include <unistd.h>
-#include "ftp.c"
+#include "ftp.h"
 
 
 int main(int argc, char *argv[])
