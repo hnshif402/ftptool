@@ -1,4 +1,3 @@
-#include <string.h>
 #include "ftp.h"
 	
 void ftp_init(ftp_t *ftp, ftp_oper_t *f_ops, char *host, char *user, char *pass, char* path, char *ftp_mode) 

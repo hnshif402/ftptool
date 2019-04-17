@@ -9,8 +9,8 @@
 #include <errno.h>
 #include <string.h>
 #include <stdlib.h>
-#include "ftpregex.h"
 #include "ftplib.h"
+#include "ftpregex.h"
 
 #define THREAD_NUM 3
 

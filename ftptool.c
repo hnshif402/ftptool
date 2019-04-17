@@ -69,15 +69,13 @@ int main(int argc, char *argv[])
     char *exclupath = malloc(strlen(argv[11])+1);
     memcpy(exclupath, argv[11], strlen(argv[11])+1);
 
-	//char *pattern = "*[245]\\.bin$";
 	regex_t r1;
-	//char *ppattern = "f*[245]\\.bin$";
 	if( regex_init(&r1, pattern) == -1 ) 
 	{
 		printf("init regex failed.\n"); 
 		exit(-1);
 	}
-	//queue_fill(&q, dir, &r1) ;
+
     char *filename;
     struct dirent *dent;
 	for(;;)
@@ -95,11 +93,11 @@ int main(int argc, char *argv[])
 		if( matchstr(filename, exclutypes) )
 			movefile(filename, exclupath);
 	    queue_add(filename, &q);
-	    if(qfull(q))  break;
+	    if(qfull(&q))  break;
 	  }
 	  printf("qlen = %d, first = %d, last = %d\n", q.qlen, q.first, q.last);
 	  pthread_mutex_unlock(&q.q_lock);
-	  if(qempty(q))
+	  if(qempty(&q))
       {
 	    sleep(1);
 	    continue;
