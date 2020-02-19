@@ -145,7 +145,7 @@ void copyfile(char* filename, char* path)
 		printf("Open file %s failed.\n", filename);
 		exit(-1);
 	}
-	if ((file = fopen(strcat(path, filename), "wb")) == NULL )
+	if ((newfile = fopen(strcat(path, filename), "wb")) == NULL )
 	{
 		printf("create file %s failed.\n", strcat(path, filename));
 		exit(-1);
