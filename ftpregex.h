@@ -8,7 +8,9 @@
 #include <stdlib.h>
 
 
+/* init regex */
 int regex_init(regex_t *preg, char *p) ;
+/* define match function to match filename */
 int match(regex_t *preg, const char *filename) ;
 
 #endif
